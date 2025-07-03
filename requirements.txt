@@ -1,0 +1,7 @@
+flask
+google-generativeai
+redis
+python-dotenv
+faiss-cpu
+sentence-transformers
+langchain
