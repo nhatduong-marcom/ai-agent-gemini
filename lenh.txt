@@ -1,0 +1,8 @@
+cd ai-agent-cskh-gemini		\\lệnh vào thư mục
+
+.\venv\Scripts\activate		\\lệnh active
+
+python app.py			\\lệnh active
+
+
+python list_models.py		\\lệnh kiểm tra model Google Gemini 

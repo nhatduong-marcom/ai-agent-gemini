@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: ai-agent-gemini
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python app.py"
+    envVars:
+      - key: GEMINI_API_KEY
+        value: your_google_api_key_here
+      - key: REDIS_URL
+        value: redis://redis:6379
+
+  - type: redis
+    name: redis
