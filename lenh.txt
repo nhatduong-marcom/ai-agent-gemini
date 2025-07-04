@@ -1,8 +1,11 @@
-cd ai-agent-cskh-gemini		\\lệnh vào thư mục
+\\lệnh vào thư mục
+cd ai-agent-cskh-gemini
 
-.\venv\Scripts\activate		\\lệnh active
+\\lệnh active
+.\venv\Scripts\activate
 
-python app.py			\\lệnh active
+\\lệnh active
+python app.py
 
-
-python list_models.py		\\lệnh kiểm tra model Google Gemini 
+\\lệnh kiểm tra model Google Gemini
+python list_models.py

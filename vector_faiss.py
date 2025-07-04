@@ -22,12 +22,10 @@ def build_vector_store():
     return store
 
 def load_vector_store():
-    """
-    Tải FAISS vector store nếu đã có, ngược lại sẽ tạo mới
-    """
-    if not os.path.exists("knowledge_base/vector_store/index.faiss"):
-        return build_vector_store()
-    return FAISS.load_local("knowledge_base/vector_store", embedding_model)
+    if os.path.exists("knowledge_base/vector_store/index.faiss"):
+        return FAISS.load_local("knowledge_base/vector_store", embedding_model)
+    else:
+        raise Exception("Vector store chưa được build! Hãy chạy build_local trước.")
 
 def get_relevant_docs(query: str, k=3):
     """
