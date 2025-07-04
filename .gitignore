@@ -1,1 +1,4 @@
+# Thêm các dòng sau
 .env
+__pycache__/
+knowledge_base/vector_store/

@@ -1,3 +1,8 @@
+import os
+if not os.path.exists("knowledge_base/vector_store/index.faiss"):
+    from vector_faiss import build_vector_store
+    build_vector_store()
+
 from flask import Flask, request, jsonify
 from agent_gemini import handle_chat
 
