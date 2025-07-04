@@ -6,7 +6,7 @@ services:
     startCommand: "python app.py"
     envVars:
       - key: GEMINI_API_KEY
-        value: your_google_api_key_here
+        value: AIzaSyBGbHn9JTXxQ13jWzMzKl7MFP1OTMXYx1A
       - key: REDIS_URL
         value: redis://redis:6379
 
