@@ -4,30 +4,46 @@ from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.document_loaders import TextLoader
 from langchain.text_splitter import CharacterTextSplitter
 
-# Khởi tạo model nhúng văn bản (Tiếng Việt + Anh)
-embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+# Dùng mô hình nhúng đa ngôn ngữ hỗ trợ tiếng Việt, Anh, Nhật, Trung, v.v.
+embedding_model = HuggingFaceEmbeddings(
+    model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+)
+
+VECTOR_STORE_PATH = "knowledge_base/vector_store"
+DATA_FILE = "knowledge_base/faq.txt"
 
 def build_vector_store():
     """
-    Tạo FAISS vector store từ file knowledge_base/faq.txt
+    Tạo FAISS vector store từ file văn bản.
     """
-    loader = TextLoader("knowledge_base/faq.txt", encoding="utf-8")
+    if not os.path.exists(DATA_FILE):
+        raise FileNotFoundError(f"Không tìm thấy file: {DATA_FILE}")
+
+    loader = TextLoader(DATA_FILE, encoding="utf-8")
     docs = loader.load()
+
     splitter = CharacterTextSplitter(chunk_size=300, chunk_overlap=30)
     chunks = splitter.split_documents(docs)
+
     store = FAISS.from_documents(chunks, embedding_model)
-    store.save_local("knowledge_base/vector_store")
+    store.save_local(VECTOR_STORE_PATH)
+
+    print(f"FAISS vector store đã được lưu tại {VECTOR_STORE_PATH}")
     return store
 
 def load_vector_store():
-    if os.path.exists("knowledge_base/vector_store/index.faiss"):
-        return FAISS.load_local("knowledge_base/vector_store", embedding_model)
-    else:
-        raise Exception("Vector store chưa được build! Hãy chạy build_local trước.")
+    """
+    Tải lại FAISS vector store từ local.
+    """
+    index_path = os.path.join(VECTOR_STORE_PATH, "index.faiss")
+    if not os.path.exists(index_path):
+        raise Exception("❌ Chưa tồn tại vector store. Vui lòng gọi build_vector_store() trước.")
+    
+    return FAISS.load_local(VECTOR_STORE_PATH, embedding_model)
 
 def get_relevant_docs(query: str, k=3):
     """
-    Truy vấn top-k tài liệu liên quan nhất từ FAISS
+    Truy vấn top-k đoạn văn bản liên quan đến query.
     """
     db = load_vector_store()
     docs = db.similarity_search(query, k=k)
